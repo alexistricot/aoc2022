@@ -2,7 +2,7 @@
 
 input = File.read('./inputs/day1.txt')
 
-elf_calories = input.split("\n\n").map { |str| str.split("\n") }.map { |list| list.map { |s| s.to_i }.sum }
+elf_calories = input.split("\n\n").map { |str| str.split("\n") }.map { |list| list.map(&:to_i).sum }
 
 # NOTE: the block { |s| s.to_i } can be replaced by &:to_i to pass the function directly
 
