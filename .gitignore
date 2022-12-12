@@ -60,3 +60,6 @@ build-iPhoneSimulator/
 
 # Inputs from the challenge
 inputs/
+
+# Visualization outputs
+*.txt

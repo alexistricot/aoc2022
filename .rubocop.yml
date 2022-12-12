@@ -3,3 +3,6 @@ Layout/IndentationWidth:
 
 Style/FrozenStringLiteralComment:
     Enabled: false
+
+Style/PerlBackrefs:
+    Enabled: false
