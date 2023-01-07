@@ -99,7 +99,7 @@ class Array
     end
 end
 
-def extract_geodes(bp, iteration, max_iter)
+def extract_geodes(bp, iteration, max_iter, visited)
     # we reached the end of iteration
     return bp.resources['geode'][bp.max_iter] if iteration >= max_iter
 
@@ -109,16 +109,23 @@ def extract_geodes(bp, iteration, max_iter)
 
     return bp.resources['geode'][bp.max_iter - 1] if next_robots.empty?
 
+    return visited[[iteration, bp.robots]] if visited.keys.include?([iteration, bp.robots])
+
     # puts "Iteration #{iteration}: next_robots: #{next_robots.map { |robot, cost| "(#{robot},#{cost})" }.join(' ; ')}"
     # bp.print(iteration)
 
     next_robots.map do |robot, new_iteration|
         # puts "Adding robot #{robot} at #{new_iteration}"
-        extract_geodes(bp.with_additional_robot(robot, new_iteration), new_iteration, max_iter)
+        new_robot = bp.with_additional_robot(robot, new_iteration)
+        visited[[new_iteration, new_robot.robots]] = extract_geodes(new_robot, new_iteration, max_iter, visited)
+        visited[[new_iteration, new_robot.robots]]
     end.max
 end
 
 input = File.read('./inputs/day19.test.txt').split("\n")
 max_iter = 24 + 1
 
-puts input.map.with_index { |line, idx| extract_geodes(Blueprint.new(line, max_iter), 0, max_iter) * (idx + 1) }.sum
+visited = {}
+puts input.map.with_index { |line, idx|
+    extract_geodes(Blueprint.new(line, max_iter), 0, max_iter, visited) * (idx + 1)
+}.sum
